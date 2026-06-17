@@ -5,7 +5,12 @@ import { CartContext } from "../context/CartContext";
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
   const { addToCart } = useContext(CartContext);
+
+ const filteredProducts = products.filter((product) =>
+  product.name.toLowerCase().includes(search.toLowerCase())
+);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,37 +27,98 @@ function Home() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>My E-Commerce Website</h1>
-      {/* link to cart */}
-      <Link to="/cart">
-        <button>Go to Cart</button>
-      </Link> 
+     <div
+  style={{
+    background: "linear-gradient(to right, #2563eb, #7c3aed)",
+    color: "white",
+    padding: "40px",
+    borderRadius: "15px",
+    textAlign: "center",
+    marginBottom: "20px",
+  }}
+>
+  <h1>🛒 Welcome to MERN Shop</h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {products.map((product) => (
-          <div
-            key={product._id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              padding: "15px",
-              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-            }}
-          >
+  <p>Discover amazing products at unbeatable prices.</p>
+
+  <Link to="/cart">
+    <button
+      style={{
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+      }}
+    >
+      Go to Cart
+    </button>
+  </Link>
+</div>
+
+
+<input
+  type="text"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  placeholder="🔍 Search products..."
+  style={{
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "none",
+    marginBottom: "20px",
+    fontSize: "16px",
+  }}
+/>
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "20px",
+  }}
+>
+  {filteredProducts.map((product) => (
+    <div
+      key={product._id}
+      style={{
+        border: "1px solid #ddd",
+        borderRadius: "10px",
+        padding: "15px",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+        transition: "0.3s",
+        cursor: "pointer",
+        transform: "translateY(0px)",
+      }}
+    >
+            <img
+  src={product.image}
+  alt={product.name}
+  style={{
+    width: "100%",
+    height: "200px",
+    objectFit: "cover",
+    borderRadius: "10px",
+  }}
+/>
             <h3>{product.name}</h3>
             <p>{product.description}</p>
             <p><strong>₹{product.price}</strong></p>
             <p>Stock: {product.stock}</p>
 
-            <button onClick={() => addToCart(product)}>
-                Add to Cart
-                </button>
+          <button
+  onClick={() => addToCart(product)}
+  style={{
+    backgroundColor: "#2563eb",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "5px",
+    cursor: "pointer",
+  }}
+>
+  Add to Cart 🛒
+</button>
           </div>
         ))}
       </div>
