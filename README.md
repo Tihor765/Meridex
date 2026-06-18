@@ -1,4 +1,10 @@
-# 🛒 MERN E-Commerce Website
+# 🛒 NovaCart – Full-Stack E-Commerce Platform
+
+## 🔗 Live Demo
+https://novacart-beta.vercel.app
+
+## 📂 GitHub Repository
+https://github.com/Tihor765/mern-commerce
 
 A full-stack E-Commerce web application built using the MERN Stack (MongoDB, Express.js, React.js, and Node.js).
 
