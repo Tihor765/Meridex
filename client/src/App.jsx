@@ -1,3 +1,4 @@
+import Wishlist from "./pages/Wishlist";
 import OrderSuccess from "./pages/OrderSuccess";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/wishlist" element={<Wishlist />} />
         </Routes>
       
     </BrowserRouter>

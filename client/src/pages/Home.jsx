@@ -2,15 +2,26 @@ import { useEffect, useState, useContext } from "react";
 import API from "../services/api";
 import { Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import { WishlistContext } from "../context/WishlistContext";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const { addToCart } = useContext(CartContext);
+  const [category, setCategory] = useState("All");
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const { addToCart } = useContext(CartContext);
+  const { addToWishlist } = useContext(WishlistContext);
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesCategory =
+      category === "All" || product.category === category;
+
+    return matchesSearch && matchesCategory;
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -72,6 +83,32 @@ function Home() {
         }}
       />
 
+      {/* Category Filter */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <button onClick={() => setCategory("All")}>
+          All
+        </button>
+
+        <button onClick={() => setCategory("Electronics")}>
+          Electronics
+        </button>
+
+        <button onClick={() => setCategory("Fashion")}>
+          Fashion
+        </button>
+
+        <button onClick={() => setCategory("Books")}>
+          Books
+        </button>
+      </div>
+
       {/* Products Grid */}
       <div
         style={{
@@ -121,6 +158,7 @@ function Home() {
               }}
             >
               <button
+                onClick={() => addToWishlist(product)}
                 style={{
                   backgroundColor: "pink",
                   border: "none",

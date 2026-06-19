@@ -18,53 +18,67 @@ function Navbar() {
         color: "white",
       }}
     >
-      <h2>🛒 MERN Shop</h2>
-<div style={{ display: "flex", gap: "20px" }}>
-  <Link
-    to="/"
-    style={{ color: "white", textDecoration: "none" }}
-  >
-    Home
-  </Link>
+      <h2>🛒 NovaCart</h2>
 
-  <Link
-    to="/cart"
-    style={{ color: "white", textDecoration: "none" }}
-  >
-    <FaShoppingCart /> Cart ({cartItems.length})
-  </Link>
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Link
+          to="/"
+          style={{ color: "white", textDecoration: "none" }}
+        >
+          Home
+        </Link>
 
-{token ? (
-  <button
-    onClick={() => {
-      localStorage.removeItem("token");
-      window.location.reload();
-    }}
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-    }}
-  >
-    Logout
-  </button>
-) : (
-  <Link
-    to="/login"
-    style={{ color: "white", textDecoration: "none" }}
-  >
-    Login
-  </Link>
-)}
+        <Link
+          to="/wishlist"
+          style={{ color: "white", textDecoration: "none" }}
+        >
+          ❤️ Wishlist
+        </Link>
 
-  <Link
-    to="/register"
-    style={{ color: "white", textDecoration: "none" }}
-  >
-    Register
-  </Link>
-</div>
+<Link
+  to="/profile"
+  style={{ color: "white", textDecoration: "none" }}
+>
+  👤 Profile
+</Link>
+        <Link
+          to="/cart"
+          style={{ color: "white", textDecoration: "none" }}
+        >
+          <FaShoppingCart /> Cart ({cartItems.length})
+        </Link>
+
+        {token ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.reload();
+            }}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Login
+          </Link>
+        )}
+
+        <Link
+          to="/register"
+          style={{ color: "white", textDecoration: "none" }}
+        >
+          Register
+        </Link>
+      </div>
     </nav>
   );
 }
