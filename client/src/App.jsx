@@ -1,3 +1,4 @@
+import OrderSuccess from "./pages/OrderSuccess";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
@@ -14,7 +15,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
+          <Route path="/order-success" element={<OrderSuccess />} />
         </Routes>
       
     </BrowserRouter>
