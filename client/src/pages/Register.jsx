@@ -19,8 +19,11 @@ function Register() {
       alert("Registration Successful!");
       console.log(response.data);
     } catch (error) {
-      alert("Registration Failed");
-      console.error(error);
+      console.log(error.response?.data);
+      alert(
+        error.response?.data?.message ||
+        "Registration Failed"
+      );
     }
   };
 

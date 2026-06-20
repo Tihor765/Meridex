@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 
@@ -7,77 +6,110 @@ function Navbar() {
   const { cartItems } = useContext(CartContext);
   const token = localStorage.getItem("token");
 
+  const navLink = {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "17px",
+    fontWeight: "500",
+    transition: "0.3s",
+  };
+
   return (
     <nav
       style={{
+        background: "rgba(15,23,42,0.95)",
+        backdropFilter: "blur(10px)",
+        padding: "18px 40px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "15px 30px",
-        background: "#2563eb",
-        color: "white",
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
       }}
     >
-      <h2>🛒 NovaCart</h2>
+      {/* Logo */}
+      <Link
+        to="/"
+        style={{
+          textDecoration: "none",
+          color: "white",
+          fontSize: "32px",
+          fontWeight: "700",
+        }}
+      >
+        🛒 NovaCart
+      </Link>
 
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Link
-          to="/"
-          style={{ color: "white", textDecoration: "none" }}
-        >
+      {/* Navigation */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "30px",
+        }}
+      >
+        <Link to="/" style={navLink}>
           Home
         </Link>
 
-        <Link
-          to="/wishlist"
-          style={{ color: "white", textDecoration: "none" }}
-        >
+        <Link to="/products" style={navLink}>
+          Products
+        </Link>
+
+        <Link to="/wishlist" style={navLink}>
           ❤️ Wishlist
         </Link>
 
-<Link
-  to="/profile"
-  style={{ color: "white", textDecoration: "none" }}
->
-  👤 Profile
-</Link>
-        <Link
-          to="/cart"
-          style={{ color: "white", textDecoration: "none" }}
-        >
-          <FaShoppingCart /> Cart ({cartItems.length})
+        <Link to="/profile" style={navLink}>
+          👤 Profile
         </Link>
 
-        {token ? (
+        <Link to="/orders" style={navLink}>
+          📦 Orders
+        </Link>
+
+        <Link to="/cart" style={navLink}>
+          🛒 Cart ({cartItems.length})
+        </Link>
+
+        {!token ? (
+          <>
+            <Link to="/login" style={navLink}>
+              Login
+            </Link>
+
+            <Link
+              to="/register"
+              style={{
+                background: "#6c63ff",
+                color: "white",
+                padding: "10px 18px",
+                borderRadius: "10px",
+                textDecoration: "none",
+                fontWeight: "600",
+              }}
+            >
+              Register
+            </Link>
+          </>
+        ) : (
           <button
             onClick={() => {
               localStorage.removeItem("token");
               window.location.reload();
             }}
             style={{
-              background: "transparent",
-              border: "none",
+              background: "#ef4444",
               color: "white",
+              border: "none",
+              padding: "10px 18px",
+              borderRadius: "10px",
               cursor: "pointer",
+              fontWeight: "600",
             }}
           >
             Logout
           </button>
-        ) : (
-          <Link
-            to="/login"
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            Login
-          </Link>
         )}
-
-        <Link
-          to="/register"
-          style={{ color: "white", textDecoration: "none" }}
-        >
-          Register
-        </Link>
       </div>
     </nav>
   );

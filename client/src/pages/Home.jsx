@@ -1,191 +1,83 @@
-import { useEffect, useState, useContext } from "react";
-import API from "../services/api";
 import { Link } from "react-router-dom";
-import { CartContext } from "../context/CartContext";
-import { WishlistContext } from "../context/WishlistContext";
 
 function Home() {
-  const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-
-  const { addToCart } = useContext(CartContext);
-  const { addToWishlist } = useContext(WishlistContext);
-
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesCategory =
-      category === "All" || product.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await API.get("/products");
-        setProducts(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
   return (
     <div style={{ padding: "20px" }}>
-      {/* Hero Section */}
       <div
         style={{
-          background: "linear-gradient(to right, #2563eb, #7c3aed)",
+          background: "linear-gradient(135deg, #ff6b9d, #6c63ff)",
           color: "white",
-          padding: "40px",
-          borderRadius: "15px",
-          textAlign: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1>🛒 Welcome to NovaCart</h1>
-
-        <p>Discover amazing products at unbeatable prices.</p>
-
-        <Link to="/cart">
-          <button
-            style={{
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-          >
-            Go to Cart
-          </button>
-        </Link>
-      </div>
-
-      {/* Search Bar */}
-      <input
-        type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="🔍 Search products..."
-        style={{
-          width: "100%",
-          padding: "12px",
-          borderRadius: "10px",
-          border: "1px solid #ddd",
-          marginBottom: "20px",
-          fontSize: "16px",
-        }}
-      />
-
-      {/* Category Filter */}
-      <div
-        style={{
+          padding: "50px",
+          borderRadius: "25px",
+          marginBottom: "30px",
           display: "flex",
-          gap: "10px",
-          marginBottom: "20px",
-          flexWrap: "wrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "40px",
         }}
       >
-        <button onClick={() => setCategory("All")}>
-          All
-        </button>
-
-        <button onClick={() => setCategory("Electronics")}>
-          Electronics
-        </button>
-
-        <button onClick={() => setCategory("Fashion")}>
-          Fashion
-        </button>
-
-        <button onClick={() => setCategory("Books")}>
-          Books
-        </button>
-      </div>
-
-      {/* Products Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {filteredProducts.map((product) => (
-          <div
-            key={product._id}
+        <div style={{ flex: 1 }}>
+          <h1
             style={{
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              padding: "15px",
-              boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              fontSize: "60px",
+              marginBottom: "15px",
+              fontWeight: "bold",
             }}
           >
-            <img
-              src={product.image}
-              alt={product.name}
+            NovaCart
+          </h1>
+
+          <h2
+            style={{
+              marginBottom: "20px",
+              fontSize: "36px",
+            }}
+          >
+            Modern Shopping Experience
+          </h2>
+
+          <p
+            style={{
+              maxWidth: "500px",
+              fontSize: "18px",
+              lineHeight: "1.6",
+            }}
+          >
+            Discover premium products with amazing discounts
+            and a beautiful shopping experience.
+          </p>
+
+          <Link to="/products">
+            <button
               style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "10px",
-              }}
-            />
-
-            <h3>{product.name}</h3>
-
-            <p>{product.description}</p>
-
-            <p>⭐⭐⭐⭐⭐ (4.8)</p>
-
-            <p>
-              <strong>₹{product.price}</strong>
-            </p>
-
-            <p>Stock: {product.stock}</p>
-
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                marginTop: "10px",
+                marginTop: "25px",
+                background: "white",
+                color: "#6c63ff",
+                border: "none",
+                padding: "14px 30px",
+                borderRadius: "12px",
+                fontWeight: "bold",
+                fontSize: "16px",
+                cursor: "pointer",
               }}
             >
-              <button
-                onClick={() => addToWishlist(product)}
-                style={{
-                  backgroundColor: "pink",
-                  border: "none",
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                ❤️ Wishlist
-              </button>
+              Shop Now 🚀
+            </button>
+          </Link>
+        </div>
 
-              <button
-                onClick={() => addToCart(product)}
-                style={{
-                  backgroundColor: "#2563eb",
-                  color: "white",
-                  border: "none",
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Add to Cart 🛒
-              </button>
-            </div>
-          </div>
-        ))}
+        <img
+          src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"
+          alt="shopping"
+          style={{
+            width: "100%",
+            maxWidth: "350px",
+            height: "220px",
+            objectFit: "cover",
+            borderRadius: "20px",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+          }}
+        />
       </div>
     </div>
   );

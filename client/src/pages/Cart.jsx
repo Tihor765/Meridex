@@ -1,8 +1,10 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
 function Cart() {
   const { cartItems, removeFromCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price,
@@ -29,6 +31,7 @@ function Cart() {
               }}
             >
               <h3>{item.name}</h3>
+
               <p>₹{item.price}</p>
 
               <button
@@ -66,7 +69,14 @@ function Cart() {
             </p>
 
             <button
-              onClick={() => alert("Order Placed Successfully! 🎉")}
+              onClick={() => {
+                localStorage.setItem(
+                  "orders",
+                  JSON.stringify(cartItems)
+                );
+
+                navigate("/order-success");
+              }}
               style={{
                 backgroundColor: "green",
                 color: "white",
