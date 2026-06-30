@@ -1,29 +1,104 @@
+/* Google Font */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: Arial, sans-serif;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #0f172a,
-    #1e293b,
-    #7c3aed
-  );
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #0f172a, #1e293b, #7c3aed);
   color: white;
 }
 
-a {
-  text-decoration: none;
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
 
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Buttons */
 button {
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  outline: none;
+  border: none;
+  font-family: inherit;
+}
+
+/* Images */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
+}
+
+/* Utility Container */
+.container {
+  width: 90%;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* Cards */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth Animations */
+.fade {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

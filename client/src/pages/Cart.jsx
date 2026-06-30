@@ -1,95 +1,90 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import CartItem from "../components/CartItem";
+import "./Cart.css";
 
 function Cart() {
-  const { cartItems, removeFromCart } = useContext(CartContext);
+  const {
+    cartItems,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
+
   const navigate = useNavigate();
 
   const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price,
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
     0
   );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center" }}>🛒 My Cart</h1>
+    <div className="cart-page">
+      <h1 className="cart-title">
+        🛒 My Shopping Cart
+      </h1>
 
       {cartItems.length === 0 ? (
-        <p style={{ textAlign: "center" }}>No items in cart.</p>
+        <h2 className="empty-cart">
+          Your Cart is Empty 😔
+        </h2>
       ) : (
-        <>
-          {cartItems.map((item) => (
-            <div
-              key={item._id}
-              style={{
-                border: "1px solid gray",
-                padding: "20px",
-                margin: "10px 0",
-                textAlign: "center",
-                borderRadius: "10px",
-              }}
-            >
-              <h3>{item.name}</h3>
+        <div className="cart-layout">
 
-              <p>₹{item.price}</p>
+          {/* Left Side - Cart Items */}
+          <div className="cart-items">
+            {cartItems.map((item) => (
+              <CartItem
+                key={item._id}
+                item={item}
+                removeFromCart={removeFromCart}
+                increaseQuantity={increaseQuantity}
+                decreaseQuantity={decreaseQuantity}
+              />
+            ))}
+          </div>
 
-              <button
-                onClick={() => removeFromCart(item._id)}
-                style={{
-                  backgroundColor: "red",
-                  color: "white",
-                  border: "none",
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Remove 🗑️
-              </button>
-            </div>
-          ))}
+          {/* Right Side - Order Summary */}
+          <div className="order-summary">
 
-          {/* Order Summary */}
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: "20px",
-              padding: "20px",
-              border: "1px solid gray",
-              borderRadius: "10px",
-            }}
-          >
             <h2>Order Summary</h2>
 
-            <p>Total Items: {cartItems.length}</p>
+            <hr />
 
             <p>
-              <strong>Total Price: ₹{totalPrice}</strong>
+              <strong>Total Items:</strong> {totalItems}
             </p>
 
-            <button
-              onClick={() => {
-                localStorage.setItem(
-                  "orders",
-                  JSON.stringify(cartItems)
-                );
+            <p>
+              <strong>Subtotal:</strong> ₹{totalPrice}
+            </p>
 
-                navigate("/order-success");
-              }}
-              style={{
-                backgroundColor: "green",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+            <p>
+              <strong>Delivery:</strong> FREE 🚚
+            </p>
+
+            <hr />
+
+            <h2 className="total-price">
+              Total: ₹{totalPrice}
+            </h2>
+
+            <button
+              className="checkout-btn"
+              onClick={() => navigate("/checkout")}
             >
-              Checkout 🛒
+              Proceed to Payment 💳
             </button>
+
           </div>
-        </>
+
+        </div>
       )}
     </div>
   );
