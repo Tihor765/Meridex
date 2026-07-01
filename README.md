@@ -1,4 +1,4 @@
-# 🛒 NovaCart – Full-Stack E-Commerce Platform
+# 🛒 Meridex – Full-Stack E-Commerce Platform
 
 ## 🔗 Live Demo
 https://novacart-beta.vercel.app
