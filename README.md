@@ -1,7 +1,7 @@
 # 🛒 Meridex – Full-Stack E-Commerce Platform
 
 ## 🔗 Live Demo
-https://meridex-beta.vercel.app
+https://novacart-beta.vercel.app
 
 ## 📂 GitHub Repository
 https://github.com/Tihor765/Meridex
