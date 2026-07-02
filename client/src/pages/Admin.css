@@ -1,0 +1,95 @@
+/* =================================
+   ADMIN PAGE
+================================= */
+
+.admin-page {
+  max-width: 1400px;
+  margin: auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.admin-title {
+  text-align: center;
+  color: white;
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.admin-subtitle {
+  text-align: center;
+  color: #cbd5e1;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-size: 18px;
+}
+
+/* =================================
+   STATS GRID
+================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+/* =================================
+   STAT CARD
+================================= */
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+
+  padding: 25px;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255,255,255,.12);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+
+  transition: all .35s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(37,99,235,.25);
+}
+
+.stat-icon {
+  font-size: 48px;
+}
+
+.stat-title {
+  color: #cbd5e1;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  color: white;
+  font-size: 34px;
+  font-weight: bold;
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width:768px){
+
+  .admin-title{
+    font-size:34px;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+}

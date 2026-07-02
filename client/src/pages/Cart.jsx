@@ -31,10 +31,23 @@ function Cart() {
       </h1>
 
       {cartItems.length === 0 ? (
-        <h2 className="empty-cart">
-          Your Cart is Empty 😔
-        </h2>
-      ) : (
+  <div className="empty-cart">
+    <div className="empty-cart-icon">🛒</div>
+
+    <h2>Your Cart is Empty</h2>
+
+    <p>
+      Looks like you haven't added any products yet.
+    </p>
+
+    <button
+      className="continue-shopping-btn"
+      onClick={() => navigate("/products")}
+    >
+      Continue Shopping
+    </button>
+  </div>
+) : (
         <div className="cart-layout">
 
           {/* Left Side - Cart Items */}

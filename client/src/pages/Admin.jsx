@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import StatCard from "../components/StatCard";
+import "./Admin.css";
 
 function Admin() {
   const [products, setProducts] = useState([]);
@@ -18,62 +20,44 @@ function Admin() {
   }, []);
 
   return (
-    <div style={{ padding: "30px", color: "white" }}>
-      <h1>🛠️ Admin Dashboard</h1>
+    <div className="admin-page">
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "20px",
-          marginTop: "30px",
-        }}
-      >
-        <div
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            padding: "20px",
-            borderRadius: "15px",
-          }}
-        >
-          <h2>📦 Products</h2>
-          <h1>{products.length}</h1>
-        </div>
+      <h1 className="admin-title">
+        🛠️ Admin Dashboard
+      </h1>
 
-        <div
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            padding: "20px",
-            borderRadius: "15px",
-          }}
-        >
-          <h2>📋 Orders</h2>
-          <h1>0</h1>
-        </div>
+      <p className="admin-subtitle">
+        Welcome to the Meridex Admin Panel
+      </p>
 
-        <div
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            padding: "20px",
-            borderRadius: "15px",
-          }}
-        >
-          <h2>👥 Users</h2>
-          <h1>0</h1>
-        </div>
+      <div className="stats-grid">
 
-        <div
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            padding: "20px",
-            borderRadius: "15px",
-          }}
-        >
-          <h2>💰 Revenue</h2>
-          <h1>₹0</h1>
-        </div>
+        <StatCard
+          icon="📦"
+          title="Products"
+          value={products.length}
+        />
+
+        <StatCard
+          icon="📋"
+          title="Orders"
+          value="0"
+        />
+
+        <StatCard
+          icon="👥"
+          title="Users"
+          value="0"
+        />
+
+        <StatCard
+          icon="💰"
+          title="Revenue"
+          value="₹0"
+        />
+
       </div>
+
     </div>
   );
 }

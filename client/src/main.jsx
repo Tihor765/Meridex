@@ -1,5 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import App from "./App";
 import "./index.css";
 
@@ -9,12 +13,25 @@ import SearchProvider from "./context/SearchContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <SearchProvider>
+    <CartProvider>
       <WishlistProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
+        <SearchProvider>
+          <BrowserRouter>
+            <App />
+
+            <ToastContainer
+              position="top-right"
+              autoClose={2500}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              pauseOnHover
+              draggable
+              theme="colored"
+            />
+          </BrowserRouter>
+        </SearchProvider>
       </WishlistProvider>
-    </SearchProvider>
+    </CartProvider>
   </React.StrictMode>
 );

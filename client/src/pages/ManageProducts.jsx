@@ -1,22 +1,28 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import { showSuccess, showError } from "../utils/toast";
 
 function ManageProducts() {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await API.get("/products");
-        setProducts(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProducts();
-  }, []);
+  
 
+  useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await API.get("/products");
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+      showError("Failed to fetch products");
+    }
+  };
+
+  fetchProducts();
+}, []);
+
+  // Delete product
   const deleteProduct = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this product?"
@@ -27,13 +33,13 @@ function ManageProducts() {
     try {
       await API.delete(`/products/${id}`);
 
-      alert("✅ Product Deleted");
+      showSuccess("Product Deleted Successfully");
 
-      const res = await API.get("/products");
-      setProducts(res.data);
+     const res = await API.get("/products");
+setProducts(res.data);
     } catch (error) {
       console.log(error);
-      alert("❌ Delete Failed");
+      showError(error.response?.data?.message || "Delete Failed");
     }
   };
 
@@ -46,8 +52,7 @@ function ManageProducts() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fill, minmax(280px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           gap: "20px",
           marginTop: "20px",
         }}
@@ -73,9 +78,7 @@ function ManageProducts() {
               }}
             />
 
-            <h3 style={{ marginTop: "10px" }}>
-              {product.name}
-            </h3>
+            <h3 style={{ marginTop: "10px" }}>{product.name}</h3>
 
             <p>₹{product.price}</p>
 
@@ -101,7 +104,7 @@ function ManageProducts() {
             <button
               onClick={() => deleteProduct(product._id)}
               style={{
-                background: "red",
+                background: "#ef4444",
                 color: "white",
                 border: "none",
                 padding: "10px",

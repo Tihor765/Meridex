@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API from "../services/api";
+import { showSuccess, showError } from "../utils/toast";
 
 function Register() {
   const [name, setName] = useState("");
@@ -16,14 +17,16 @@ function Register() {
         password,
       });
 
-      alert("Registration Successful!");
+      showSuccess("Registration Successful!");
       console.log(response.data);
+
+      // Optional: Clear form after successful registration
+      setName("");
+      setEmail("");
+      setPassword("");
     } catch (error) {
       console.log(error.response?.data);
-      alert(
-        error.response?.data?.message ||
-        "Registration Failed"
-      );
+      showError(error.response?.data?.message || "Registration Failed");
     }
   };
 
@@ -37,7 +40,11 @@ function Register() {
           placeholder="Enter Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{ padding: "10px", margin: "10px", width: "250px" }}
+          style={{
+            padding: "10px",
+            margin: "10px",
+            width: "250px",
+          }}
         />
 
         <br />
@@ -47,7 +54,11 @@ function Register() {
           placeholder="Enter Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ padding: "10px", margin: "10px", width: "250px" }}
+          style={{
+            padding: "10px",
+            margin: "10px",
+            width: "250px",
+          }}
         />
 
         <br />
@@ -57,7 +68,11 @@ function Register() {
           placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{ padding: "10px", margin: "10px", width: "250px" }}
+          style={{
+            padding: "10px",
+            margin: "10px",
+            width: "250px",
+          }}
         />
 
         <br />
@@ -70,6 +85,7 @@ function Register() {
             color: "white",
             border: "none",
             borderRadius: "5px",
+            cursor: "pointer",
           }}
         >
           Register

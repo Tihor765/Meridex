@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API from "../services/api";
+import { showSuccess, showError } from "../utils/toast";
 
 function AddProduct() {
   const [name, setName] = useState("");
@@ -22,7 +23,7 @@ function AddProduct() {
         stock,
       });
 
-      alert("✅ Product Added Successfully");
+      showSuccess("Product Added Successfully");
 
       setName("");
       setPrice("");
@@ -32,7 +33,7 @@ function AddProduct() {
       setStock("");
     } catch (error) {
       console.log(error);
-      alert("❌ Failed to add product");
+      showError(error.response?.data?.message || "Failed to add product");
     }
   };
 

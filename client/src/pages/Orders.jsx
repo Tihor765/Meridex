@@ -1,48 +1,54 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import OrderCard from "../components/OrderCard";
+import "./Orders.css";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await API.get("/orders");
-        setOrders(res.data);
+        const { data } = await API.get("/orders");
+        setOrders(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchOrders();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="orders-page">
+        <h1 className="orders-title">📦 My Orders</h1>
+        <h2 className="orders-loading">Loading Orders...</h2>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: "30px", color: "white" }}>
-      <h1>📦 My Orders</h1>
+    <div className="orders-page">
+      <h1 className="orders-title">📦 My Orders</h1>
 
       {orders.length === 0 ? (
-        <h3>No Orders Found</h3>
+        <div className="orders-empty">
+          <h2>No Orders Yet 📭</h2>
+          <p>Start shopping to see your orders here.</p>
+        </div>
       ) : (
-        orders.map((order) => (
-          <div
-            key={order._id}
-            style={{
-              background: "rgba(255,255,255,0.1)",
-              padding: "20px",
-              borderRadius: "15px",
-              marginTop: "15px",
-            }}
-          >
-            <h3>{order.productName}</h3>
-
-            <p>Price: ₹{order.price}</p>
-
-            <p>Customer: {order.customerName}</p>
-
-            <p>Status: {order.status}</p>
-          </div>
-        ))
+        <div className="orders-grid">
+          {orders.map((order) => (
+            <OrderCard
+              key={order._id}
+              order={order}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

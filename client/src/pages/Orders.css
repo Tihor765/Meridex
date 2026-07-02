@@ -1,0 +1,129 @@
+/* =================================
+   ORDERS PAGE
+================================= */
+
+.orders-page {
+  max-width: 1300px;
+  margin: auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.orders-title {
+  text-align: center;
+  color: white;
+  font-size: 42px;
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
+.orders-grid {
+  display: grid;
+  gap: 25px;
+}
+
+/* =================================
+   ORDER CARD
+================================= */
+
+.order-card {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(37,99,235,0.25);
+}
+
+.order-image-container {
+  flex-shrink: 0;
+}
+
+.order-image {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.order-details {
+  flex: 1;
+}
+
+.order-product-name {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.order-price {
+  color: #22c55e;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.order-date {
+  color: #cbd5e1;
+  margin-bottom: 15px;
+}
+
+.order-status {
+  display: inline-block;
+  background: #22c55e;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+/* =================================
+   EMPTY & LOADING
+================================= */
+
+.orders-empty,
+.orders-loading {
+  text-align: center;
+  color: white;
+  margin-top: 80px;
+}
+
+.orders-empty h2,
+.orders-loading {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.orders-empty p {
+  color: #cbd5e1;
+  font-size: 18px;
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 768px) {
+  .orders-title {
+    font-size: 34px;
+  }
+
+  .order-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .order-image {
+    width: 180px;
+    height: 180px;
+  }
+}

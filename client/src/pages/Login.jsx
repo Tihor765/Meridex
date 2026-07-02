@@ -1,3 +1,4 @@
+import { showSuccess, showError } from "../utils/toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
@@ -19,10 +20,11 @@ function Login() {
       });
 
     localStorage.setItem("token", response.data.token);
-alert("Login Successful!");
+showSuccess("Login Successful!");
 navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
+      showError(error.response?.data?.message || "Login Failed");
     }
   };
 

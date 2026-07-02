@@ -1,3 +1,5 @@
+import Loader from "../components/Loader";
+import { showSuccess, showError } from "../utils/toast";
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
@@ -58,19 +60,9 @@ function ProductDetails() {
     },
   ];
 
-  if (!product) {
-    return (
-      <h2
-        style={{
-          color: "white",
-          textAlign: "center",
-          marginTop: "50px",
-        }}
-      >
-        Loading...
-      </h2>
-    );
-  }
+if (!product) {
+  return <Loader />;
+}
 
   return (
     <div
@@ -185,7 +177,7 @@ function ProductDetails() {
   } catch (error) {
   console.log(error);
   console.log(error.response?.data);
-  alert(error.response?.data?.message || error.message);
+  showError(error.response?.data?.message || error.message);
 }
 }}
             style={{
@@ -270,11 +262,10 @@ function ProductDetails() {
                   rating: 5,
                   comment: "",
                 });
-
-                alert("✅ Review Added Successfully!");
+showSuccess("Review Added Successfully!");
               } catch (error) {
                 console.log(error);
-                alert("Failed to add review");
+                showError("Failed to add review");
               }
             }}
             style={{

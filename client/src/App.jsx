@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Navbar from "./components/Navbar";
 
@@ -19,37 +21,111 @@ import ManageProducts from "./pages/ManageProducts";
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/cart" element={<Cart />} />
 
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
+        {/* Protected User Routes */}
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/manage-products" element={<ManageProducts />} />
-        <Route path="/add-product" element={<AddProduct />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/order-success"
+          element={
+            <ProtectedRoute>
+              <OrderSuccess />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/manage-products"
+          element={
+            <ProtectedRoute>
+              <ManageProducts />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/add-product"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/edit-product/:id"
-          element={<EditProduct />}
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
         />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 

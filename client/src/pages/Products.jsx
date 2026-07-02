@@ -1,24 +1,62 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import API from "../services/api";
 import "./Products.css";
+
+import ProductSkeleton from "../components/ProductSkeleton";
+import ProductCard from "../components/ProductCard";
+import ErrorState from "../components/ErrorState";
 
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { SearchContext } from "../context/SearchContext";
 
-import ProductCard from "../components/ProductCard";
-
 function Products() {
   const [products, setProducts] = useState([]);
-  const { search } = useContext(SearchContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("default");
   const [maxPrice, setMaxPrice] = useState(100000);
   const [message, setMessage] = useState("");
 
+  const { search } = useContext(SearchContext);
   const { addToCart } = useContext(CartContext);
   const { addToWishlist } = useContext(WishlistContext);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(false);
+
+      const res = await API.get("/products");
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+ useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+
+      const res = await API.get("/products");
+      setProducts(res.data);
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   const filteredProducts = products
     .filter((product) => {
@@ -52,108 +90,98 @@ function Products() {
       }
     });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await API.get("/products");
-        setProducts(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  if (loading) {
+    return (
+      <div className="products-grid">
+        {[...Array(8)].map((_, index) => (
+          <ProductSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }
 
-    fetchProducts();
-  }, []);
+  if (error) {
+    return (
+      <ErrorState
+        title="Unable to Load Products"
+        message="We couldn't connect to the server. Please try again."
+        onRetry={fetchProducts}
+      />
+    );
+  }
 
   return (
     <div className="products-page">
-     <div className="products-header">
-  <div>
-    <h1 className="products-title">
-      🛍️ All Products
-    </h1>
+      {/* Header */}
+      <div className="products-header">
+        <div>
+          <h1 className="products-title">🛍️ All Products</h1>
 
-    <p className="products-subtitle">
-      Discover premium products at the best prices.
-    </p>
-  </div>
+          <p className="products-subtitle">
+            Discover premium products at the best prices.
+          </p>
+        </div>
 
-  <div className="products-count">
-    {filteredProducts.length} Products
-  </div>
-</div>
+        <div className="products-count">
+          {filteredProducts.length} Products
+        </div>
+      </div>
 
-      {/* Category Filter */}
-  {/* ================= FILTER TOOLBAR ================= */}
+      {/* Filters */}
+      <div className="filter-toolbar">
+        {/* Category */}
+        <div className="filter-group">
+          <label>Category</label>
 
-<div className="filter-toolbar">
+          <div className="category-filter">
+            {["All", "Electronics", "Fashion", "Books"].map((cat) => (
+              <button
+                key={cat}
+                className={
+                  category === cat
+                    ? "category-btn active"
+                    : "category-btn"
+                }
+                onClick={() => setCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
 
-  {/* Category Filter */}
-  <div className="filter-group">
-    <label>Category</label>
+        {/* Sort */}
+        <div className="filter-group">
+          <label>Sort By</label>
 
-    <div className="category-filter">
-      {["All", "Electronics", "Fashion", "Books"].map((cat) => (
-        <button
-          key={cat}
-          onClick={() => setCategory(cat)}
-          className={
-            category === cat
-              ? "category-btn active"
-              : "category-btn"
-          }
-        >
-          {cat}
-        </button>
-      ))}
-    </div>
-  </div>
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="default">Sort By</option>
+            <option value="low-high">💰 Price: Low → High</option>
+            <option value="high-low">💰 Price: High → Low</option>
+            <option value="a-z">🔤 Name: A → Z</option>
+            <option value="z-a">🔤 Name: Z → A</option>
+          </select>
+        </div>
 
-  {/* Sort */}
-  <div className="filter-group">
-    <label>Sort By</label>
+        {/* Price */}
+        <div className="filter-group price-group">
+          <label>Maximum Price: ₹{maxPrice}</label>
 
-    <select
-      value={sortBy}
-      onChange={(e) => setSortBy(e.target.value)}
-      className="sort-select"
-    >
-      <option value="default">Sort By</option>
-      <option value="low-high">
-        💰 Price: Low → High
-      </option>
-      <option value="high-low">
-        💰 Price: High → Low
-      </option>
-      <option value="a-z">
-        🔤 Name: A → Z
-      </option>
-      <option value="z-a">
-        🔤 Name: Z → A
-      </option>
-    </select>
-  </div>
-
-  {/* Price Filter */}
-  <div className="filter-group price-group">
-    <label>
-      Maximum Price: ₹{maxPrice}
-    </label>
-
-    <input
-      type="range"
-      min="0"
-      max="100000"
-      step="500"
-      value={maxPrice}
-      onChange={(e) =>
-        setMaxPrice(Number(e.target.value))
-      }
-      className="price-slider"
-    />
-  </div>
-
-</div>
+          <input
+            type="range"
+            min="0"
+            max="100000"
+            step="500"
+            value={maxPrice}
+            className="price-slider"
+            onChange={(e) => setMaxPrice(Number(e.target.value))}
+          />
+        </div>
+      </div>
 
       {/* Success Message */}
       {message && (
@@ -162,17 +190,34 @@ function Products() {
         </div>
       )}
 
-      {/* Products Grid */}
+      {/* Products */}
       <div className="products-grid">
-        {filteredProducts.map((product) => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            addToCart={addToCart}
-            addToWishlist={addToWishlist}
-            setMessage={setMessage}
-          />
-        ))}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              addToCart={addToCart}
+              addToWishlist={addToWishlist}
+              setMessage={setMessage}
+            />
+          ))
+        ) : (
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              padding: "60px 20px",
+              color: "white",
+            }}
+          >
+            <h2>🔍 No Products Found</h2>
+
+            <p>
+              Try changing your search, category, or price filter.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
