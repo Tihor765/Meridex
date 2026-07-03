@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import Addresses from "./pages/Addresses";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Navbar from "./components/Navbar";
@@ -75,6 +75,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/addresses"
+  element={
+    <ProtectedRoute>
+      <Addresses />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/order-success"

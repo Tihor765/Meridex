@@ -48,11 +48,13 @@ function Profile() {
           <p>Track all your purchases.</p>
         </Link>
 
-        <div className="profile-card">
-          <div style={{ fontSize: "45px" }}>📍</div>
-          <h2>Addresses</h2>
-          <p>Coming Soon</p>
-        </div>
+        <Link to="/addresses" className="profile-card">
+  <div style={{ fontSize: "45px" }}>📍</div>
+
+  <h2>My Addresses</h2>
+
+  <p>Manage your saved delivery addresses.</p>
+</Link>
 
         <div className="profile-card">
           <div style={{ fontSize: "45px" }}>⚙️</div>
