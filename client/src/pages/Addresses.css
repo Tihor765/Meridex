@@ -216,3 +216,70 @@
   box-shadow:
   0 15px 30px rgba(147,51,234,.4);
 }
+.address-actions {
+
+  display: flex;
+
+  gap: 15px;
+
+  margin-top: 20px;
+
+  align-items: center;
+
+}
+
+
+
+.edit-address-btn,
+.delete-address-btn {
+
+  padding: 14px 28px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+
+
+.edit-address-btn {
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+}
+
+
+
+.delete-address-btn {
+
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #b91c1c
+  );
+
+}
+
+
+
+.edit-address-btn:hover,
+.delete-address-btn:hover {
+
+  transform: translateY(-3px);
+
+}

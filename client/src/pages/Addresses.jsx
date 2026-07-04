@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import "./Addresses.css";
 
+
 function Addresses() {
 
   const [showForm, setShowForm] = useState(false);
 
   const [addresses, setAddresses] = useState([]);
 
+  const [editId, setEditId] = useState(null);
+
+
   const [formData, setFormData] = useState({
+
     fullName: "",
     phone: "",
     house: "",
@@ -17,12 +22,10 @@ function Addresses() {
     state: "",
     pincode: "",
     landmark: "",
+
   });
 
 
-  // =========================
-  // GET SAVED ADDRESSES
-  // =========================
 
   useEffect(() => {
 
@@ -34,19 +37,16 @@ function Addresses() {
           "/addresses",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem(
-                "token"
-              )}`,
+              Authorization:
+                `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
 
 
-        const userAddresses =
-          res.data.addresses || res.data;
-
-
-        setAddresses(userAddresses);
+        setAddresses(
+          res.data.addresses || res.data
+        );
 
 
       } catch (error) {
@@ -60,15 +60,12 @@ function Addresses() {
 
     getAddresses();
 
-
   }, []);
 
 
 
 
-  // =========================
-  // INPUT CHANGE
-  // =========================
+
 
 
   const handleChange = (e) => {
@@ -87,44 +84,84 @@ function Addresses() {
 
 
 
-  // =========================
-  // SAVE ADDRESS
-  // =========================
 
+
+  // ADD + UPDATE ADDRESS
 
   const handleSaveAddress = async () => {
 
     try {
 
 
-      const res = await API.post(
-        "/addresses",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem(
-              "token"
-            )}`,
-          },
-        }
+      let res;
+
+
+      if (editId) {
+
+
+        res = await API.put(
+
+          `/addresses/${editId}`,
+
+          formData,
+
+          {
+            headers: {
+
+              Authorization:
+                `Bearer ${localStorage.getItem("token")}`,
+
+            },
+          }
+
+        );
+
+
+        alert(
+          "Address updated successfully ✏️"
+        );
+
+
+      } else {
+
+
+
+        res = await API.post(
+
+          "/addresses",
+
+          formData,
+
+          {
+            headers: {
+
+              Authorization:
+                `Bearer ${localStorage.getItem("token")}`,
+
+            },
+          }
+
+        );
+
+
+        alert(
+          "Address saved successfully ✅"
+        );
+
+
+      }
+
+
+
+
+      setAddresses(
+        res.data.addresses || res.data
       );
 
 
 
-      const updatedAddresses =
-        res.data.addresses || res.data;
-
-
-
-      setAddresses(updatedAddresses);
-
-
-
-      alert("Address saved successfully ✅");
-
-
-
       setFormData({
+
         fullName: "",
         phone: "",
         house: "",
@@ -133,11 +170,111 @@ function Addresses() {
         state: "",
         pincode: "",
         landmark: "",
+
       });
 
 
 
+      setEditId(null);
+
       setShowForm(false);
+
+
+
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Operation failed ❌");
+
+    }
+
+  };
+
+
+
+
+
+
+
+
+
+  // EDIT
+
+  const handleEditAddress = (address) => {
+
+
+    setFormData({
+
+      fullName: address.fullName,
+
+      phone: address.phone,
+
+      house: address.house,
+
+      area: address.area,
+
+      city: address.city,
+
+      state: address.state,
+
+      pincode: address.pincode,
+
+      landmark: address.landmark,
+
+    });
+
+
+    setEditId(address._id);
+
+
+    setShowForm(true);
+
+
+  };
+
+
+
+
+
+
+
+
+  // DELETE
+
+  const handleDeleteAddress = async (id) => {
+
+
+    try {
+
+
+      const res = await API.delete(
+
+        `/addresses/${id}`,
+
+        {
+          headers: {
+
+            Authorization:
+              `Bearer ${localStorage.getItem("token")}`,
+
+          },
+        }
+
+      );
+
+
+
+      setAddresses(
+        res.data.addresses || res.data
+      );
+
+
+
+      alert(
+        "Address deleted 🗑"
+      );
 
 
 
@@ -147,14 +284,13 @@ function Addresses() {
       console.log(error);
 
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to save address ❌"
-      );
-
     }
 
+
   };
+
+
+
 
 
 
@@ -171,7 +307,7 @@ function Addresses() {
         <h1>📍 My Addresses</h1>
 
         <p>
-          Manage your delivery addresses for faster checkout.
+          Manage your delivery addresses.
         </p>
 
       </div>
@@ -180,89 +316,57 @@ function Addresses() {
 
 
 
-      {/* ADD ADDRESS FORM */}
-
-
       {showForm ? (
 
         <div className="address-form">
 
 
-          <h2>Add New Address</h2>
+          <h2>
+
+            {editId
+              ? "✏️ Edit Address"
+              : "Add New Address"}
+
+          </h2>
 
 
 
-          <input
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-          />
+
+          {Object.keys(formData).map(
+            (field) => (
+
+              <input
+
+                key={field}
+
+                name={field}
+
+                placeholder={field}
+
+                value={formData[field]}
+
+                onChange={handleChange}
+
+              />
+
+            )
+          )}
 
 
-          <input
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="house"
-            placeholder="House / Flat No."
-            value={formData.house}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="area"
-            placeholder="Area / Street"
-            value={formData.area}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="city"
-            placeholder="City"
-            value={formData.city}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="state"
-            placeholder="State"
-            value={formData.state}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="pincode"
-            placeholder="Pincode"
-            value={formData.pincode}
-            onChange={handleChange}
-          />
-
-
-          <input
-            name="landmark"
-            placeholder="Landmark"
-            value={formData.landmark}
-            onChange={handleChange}
-          />
 
 
 
           <button
+
             className="add-address-btn"
+
             onClick={handleSaveAddress}
+
           >
 
-            Save Address
+            {editId
+              ? "Update Address"
+              : "Save Address"}
 
           </button>
 
@@ -272,104 +376,124 @@ function Addresses() {
 
 
 
-      ) : (
 
+      ) : (
 
 
         <>
 
 
-
-          {addresses.length === 0 ? (
-
-
-            <div className="addresses-empty">
+          <div className="address-list">
 
 
-              <h2>No Addresses Found</h2>
+            {addresses.map((address) => (
 
 
-              <p>
-                Your saved addresses will appear here.
-              </p>
+              <div
+
+                className="address-card"
+
+                key={address._id}
+
+              >
 
 
-            </div>
+                <h2>
+                  🏠 {address.fullName}
+                </h2>
+
+
+                <p>
+                  📞 {address.phone}
+                </p>
+
+
+                <p>
+
+                  {address.house},
+                  {" "}
+                  {address.area}
+
+                </p>
 
 
 
-          ) : (
+                <p>
+
+                  {address.city},
+                  {" "}
+                  {address.state}
+
+                </p>
 
 
 
-            <div className="address-list">
+                <p>
+                  📍 {address.pincode}
+                </p>
 
 
 
-              {addresses.map((address) => (
 
 
 
-                <div
-                  className="address-card"
-                  key={address._id}
+                <button
+
+                  className="add-address-btn"
+
+                  onClick={() =>
+                    handleEditAddress(address)
+                  }
+
                 >
 
+                  ✏️ Edit Address
 
-                  <h2>
-                    🏠 {address.fullName}
-                  </h2>
-
-
-                  <p>
-                    📞 {address.phone}
-                  </p>
-
-
-                  <p>
-                    {address.house}, {address.area}
-                  </p>
-
-
-                  <p>
-                    {address.city}, {address.state}
-                  </p>
-
-
-                  <p>
-                    📍 {address.pincode}
-                  </p>
-
-
-                  {address.landmark && (
-
-                    <p>
-                      Landmark : {address.landmark}
-                    </p>
-
-                  )}
+                </button>
 
 
 
-                </div>
 
 
-              ))}
+                <button
+
+                  className="delete-address-btn"
+
+                  onClick={() =>
+                    handleDeleteAddress(
+                      address._id
+                    )
+                  }
+
+                >
+
+                  🗑 Delete Address
+
+                </button>
 
 
 
-            </div>
+
+              </div>
 
 
+            ))}
 
-          )}
+
+          </div>
+
 
 
 
 
           <button
+
             className="add-address-btn"
-            onClick={() => setShowForm(true)}
+
+            onClick={() =>
+              setShowForm(true)
+            }
+
           >
 
             + Add New Address
@@ -378,13 +502,10 @@ function Addresses() {
 
 
 
-
         </>
 
 
-
       )}
-
 
 
 

@@ -2,52 +2,140 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 
 const createOrder = async (req, res) => {
+
+  console.log("🔥 NEW ORDER CONTROLLER RUNNING");
+
   try {
-    const { productId } = req.body;
 
-    const product = await Product.findById(productId);
+    const {
+      items,
+      shippingAddress,
+      totalAmount,
+      paymentInfo,
+    } = req.body;
 
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
-    }
 
-    if (product.stock <= 0) {
+    if (!items || items.length === 0) {
       return res.status(400).json({
-        message: "Out of Stock",
+        message: "No items found",
       });
     }
 
-    // Reduce stock
-    product.stock -= 1;
-    await product.save();
 
-    // Create order
-    const order = await Order.create(req.body);
+
+    for (const item of items) {
+
+      console.log("ITEM:", item);
+
+
+      let product =
+        await Product.findById(
+          item.product
+        );
+
+
+      if (!product) {
+
+        product =
+          await Product.findOne({
+            name: item.name,
+          });
+
+      }
+
+
+      if (!product) {
+
+        return res.status(404).json({
+          message: "Product not found",
+        });
+
+      }
+
+
+
+      product.stock =
+        product.stock -
+        item.quantity;
+
+
+      await product.save();
+
+    }
+
+
+
+    const order =
+      await Order.create({
+
+        user: req.user.id,
+
+        items,
+
+        shippingAddress,
+
+        totalAmount,
+
+        paymentInfo,
+
+      });
+
+
 
     res.status(201).json({
-      message: "Order placed successfully",
+
+      message:
+        "Order placed successfully",
+
       order,
+
     });
+
+
   } catch (error) {
+
     res.status(500).json({
+
       message: error.message,
+
     });
+
   }
+
 };
+
+
+
 
 const getOrders = async (req, res) => {
+
   try {
-    const orders = await Order.find();
+
+    const orders =
+      await Order.find({
+        user: req.user.id,
+      })
+      .sort({
+        createdAt: -1,
+      });
+
 
     res.json(orders);
+
+
   } catch (error) {
+
     res.status(500).json({
+
       message: error.message,
+
     });
+
   }
+
 };
+
+
 
 module.exports = {
   createOrder,

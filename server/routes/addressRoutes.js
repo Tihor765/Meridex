@@ -4,23 +4,52 @@ const router = express.Router();
 const {
   addAddress,
   getAddresses,
+  deleteAddress,
+  updateAddress,
 } = require("../controllers/addressController");
 
 const protect = require("../middleware/authMiddleware");
 
 
-// TEST
+// TEST ROUTE
+
 router.get("/test", (req, res) => {
   res.send("Address route connected ✅");
 });
 
 
-// Get Addresses
-router.get("/", protect, getAddresses);
+// GET ADDRESSES
+
+router.get(
+  "/",
+  protect,
+  getAddresses
+);
 
 
-// Add Address
-router.post("/", protect, addAddress);
+// ADD ADDRESS
+
+router.post(
+  "/",
+  protect,
+  addAddress
+);
+
+
+// DELETE ADDRESS
+
+router.delete(
+  "/:id",
+  protect,
+  deleteAddress
+);
+// UPDATE ADDRESS
+
+router.put(
+  "/:id",
+  protect,
+  updateAddress
+);
 
 
 module.exports = router;

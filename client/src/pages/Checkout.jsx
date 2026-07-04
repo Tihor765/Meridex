@@ -205,26 +205,105 @@ function Checkout() {
         order_id: order.id,
 
 
+handler: async function (response) {
 
-        handler: function (response) {
+  try {
+
+const orderItems =
+  cartItems.map((item) => ({
+product:
+  item._id ||
+  item.id ||
+  item.product?._id ||
+  item.product?.id,
+
+    name:
+      item.name ||
+      item.product?.name,
+
+    image:
+      item.image ||
+      item.product?.image,
+
+    price:
+      item.price ||
+      item.product?.price,
+
+    quantity:
+      item.quantity || 1,
+
+  }));
 
 
-          showSuccess(
-            "Payment Successful!"
-          );
 
 
-          console.log(response);
+    await API.post(
+      "/orders",
+      {
+
+        items: orderItems,
 
 
-          console.log(
-            "Selected Address:",
-            selectedAddress
-          );
+        shippingAddress:
+          selectedAddress,
 
+
+        totalAmount:
+          totalPrice,
+
+
+        paymentInfo: {
+
+          razorpayPaymentId:
+            response.razorpay_payment_id,
+
+
+          razorpayOrderId:
+            response.razorpay_order_id,
 
         },
 
+
+      },
+
+      {
+
+        headers: {
+
+          Authorization:
+            `Bearer ${localStorage.getItem(
+              "token"
+            )}`,
+
+        },
+
+      }
+
+    );
+
+
+
+
+    showSuccess(
+      "Order placed successfully 🎉"
+    );
+
+
+
+  } catch (error) {
+
+
+    console.log(error);
+
+
+    showError(
+      "Order saving failed"
+    );
+
+
+  }
+
+},
 
 
         theme: {
@@ -565,20 +644,16 @@ function Checkout() {
 
 
 
-
-          <button
-
-            className="pay-btn"
-
-            onClick={handlePayment}
-
-          >
+<button
+  className="pay-btn"
+  onClick={handlePayment}
+>
+  Proceed to Payment
+</button>
 
 
-            Proceed to Payment
 
-
-          </button>
+         
 
 
 
